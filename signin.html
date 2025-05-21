@@ -1,0 +1,28 @@
+<form id="signin-form">
+  <input type="email" id="email" placeholder="Email" required />
+  <input type="password" id="password" placeholder="Password" required />
+  <button type="submit">Sign In</button>
+</form>
+
+<script>
+document.getElementById('signin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const res = await fetch('http://localhost:5000/api/auth/signin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  });
+
+  const data = await res.json();
+  if (data.token) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('studentName', data.student.name);
+    window.location.href = "dashboard.html";
+  } else {
+    alert(data.error);
+  }
+});
+</script>
